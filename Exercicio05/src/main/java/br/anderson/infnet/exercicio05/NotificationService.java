@@ -1,13 +1,13 @@
 package br.anderson.infnet.exercicio05;
 
 public class NotificationService {
-    public void notifyUser(String channel, String message) {
-        if (channel.equals("EMAIL")) {
-            System.out.println("Sending EMAIL: " + message);
-        } else if (channel.equals("SMS")) {
-            System.out.println("Sending SMS: " + message);
-        } else if (channel.equals("PUSH")) {
-            System.out.println("Sending PUSH: " + message);
-        }
+    private NotificationMethod method;
+
+    public NotificationService(NotificationMethod method) {
+        this.method = method;
+    }
+
+    public void notifyUser(String message) {
+        method.notifyUser(message);
     }
 }
