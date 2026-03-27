@@ -1,51 +1,38 @@
 package br.anderson.infnet.exercicio02;
 
-public class Invoice {
-    public String clientName;
-    public String clientEmail;
-    public double amount;
-    public int type;
+import java.util.Objects;
 
-    public void enviarPorEmail(String email, String conteudo) {
-        System.out.println("Enviando email para: " + email);
+public class Invoice {
+    private Order order;
+
+    public Invoice(Order order) {
+        this.order = order;
+    }
+
+    public void enviarPorEmail(String conteudo) {
+        checkEmail();
+        System.out.println("Enviando email para: " + order.getClient().email());
         System.out.println("Conteúdo:\n" + conteudo);
     }
 
     public void process() {
-        if (clientEmail == null && !clientEmail.contains("@")) {
-            System.out.println("Email inválido. Falha no envio.");
-        }
+        enviarPorEmail(toReport());
+    }
 
-        if (type == 1) {
-            System.out.println("Nota fiscal simples");
-        } else if (type == 2) {
-            System.out.println("Nota fiscal com imposto");
-        } else if (type == -1) {
-            // caso nunca ocorre, mas está presente
-            System.out.println("Nota fiscal fantasma");
-        } else {
-            System.out.println("Tipo desconhecido");
-        }
-        //imprimir nota
-        System.out.println("--- NOTA FISCAL ---");
-        System.out.println("Cliente: " + clientName);
-        System.out.println("Valor: R$ " + amount);
+    private String toReport() {
+        StringBuilder output = new StringBuilder();
+        output.append(order.type.toTitle()+"\n");
+        output.append("--- NOTA FISCAL ---\n");
+        output.append("Cliente: " +order.getClient().name()+"\n");
+        output.append("Valor  : R$ " +order.getAmount()+"\n");
+        output.append("Tipo   : " +order.type.toDescription()+"\n");
+        return output.toString();
+    }
 
-        if (type == 1) {
-            System.out.println("Tipo: Simples");
-        } else if (type == 2) {
-            System.out.println("Tipo: Com imposto");
-        } else {
-            System.out.println("Tipo: Desconhecido");
+    private void checkEmail() {
+        Objects.requireNonNull(order.getClient().email());
+        if (!order.getClient().email().contains("@")) {
+            throw new IllegalArgumentException("E-mail inválido: deve conter '@'");
         }
-        System.out.println("---------------------");
-        // Enviar nota para email
-        System.out.println("Enviando nota fiscal para: " + clientEmail);
-        String nota = "--- NOTA FISCAL ---\n" +
-                "Cliente: " + clientName + "\n" +
-                "Valor: R$ " + amount + "\n" +
-                "Tipo: " + (type == 1 ? "Simples" : type == 2 ? "Com imposto" : "Desconhecido") + "\n" +
-                "---------------------";
-        enviarPorEmail(clientEmail, nota);
     }
 }
