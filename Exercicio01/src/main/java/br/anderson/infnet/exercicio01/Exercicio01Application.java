@@ -13,7 +13,7 @@ public class Exercicio01Application implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		X x = new X();
-		x.y(10);
+		Avaliador avaliador = new Avaliador();
+		System.out.println(avaliador.avaliar(10));
 	}
 }
